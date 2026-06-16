@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Clarion Voice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+
+/* ── Tokens ── */
+:root {
+  --void:       #0D0F14;
+  --base:       #141720;
+  --elevated:   #1E2230;
+  --border:     #272C3D;
+  --signal:     #00C8FF;
+  --signal-dim: rgba(0,200,255,0.10);
+  --signal-glow:rgba(0,200,255,0.22);
+  --text-hi:    #F0F4FF;
+  --text-mid:   #8B92B3;
+  --text-lo:    #4E546E;
+  --amber:      #F5A623;
+
+  --font: 'Space Grotesk', system-ui, sans-serif;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font);
+  background: var(--void);
+  color: var(--text-hi);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+img, svg { display: block; }
+
+/* ── Nav ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 60px;
+  background: rgba(13,15,20,0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(39,44,61,0.6);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  color: var(--signal);
+}
+
+.nav-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-hi);
+}
+
+.nav-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-left: 2px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-mid);
+  transition: color 0.15s;
+}
+
+.nav-links a:hover { color: var(--text-hi); }
+
+.nav-cta {
+  font-size: 13px;
+  font-weight: 700;
+  color: #000 !important;
+  background: var(--signal);
+  padding: 8px 18px;
+  border-radius: 6px;
+  transition: opacity 0.15s, box-shadow 0.15s !important;
+}
+
+.nav-cta:hover {
+  opacity: 0.88;
+  box-shadow: 0 0 18px var(--signal-glow);
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 100px 24px 80px;
+  overflow: hidden;
+}
+
+/* Grid background */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 70% at 50% 45%, black 20%, transparent 75%);
+  pointer-events: none;
+}
+
+/* Radial glow behind headline */
+.hero-glow {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(0,200,255,0.08) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--signal);
+  background: var(--signal-dim);
+  border: 1px solid rgba(0,200,255,0.2);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 32px;
+}
+
+.hero-eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%,100% { opacity:1; transform: scale(1); }
+  50% { opacity:0.4; transform: scale(0.8); }
+}
+
+.hero-headline {
+  font-size: clamp(48px, 8vw, 92px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  color: var(--text-hi);
+  max-width: 14ch;
+  margin-bottom: 28px;
+}
+
+.hero-headline em {
+  font-style: normal;
+  color: var(--signal);
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 19px);
+  font-weight: 400;
+  color: var(--text-mid);
+  max-width: 52ch;
+  line-height: 1.65;
+  margin-bottom: 48px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 72px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: var(--signal);
+  color: #000;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.15s, box-shadow 0.15s, transform 0.1s;
+  letter-spacing: -0.01em;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+  box-shadow: 0 0 28px var(--signal-glow);
+}
+
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 24px;
+  background: transparent;
+  color: var(--text-mid);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-ghost:hover {
+  border-color: var(--text-lo);
+  color: var(--text-hi);
+}
+
+/* Waveform — the signature element */
+.hero-waveform {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+}
+
+.waveform-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.wl-noise { color: var(--text-lo); }
+.wl-signal { color: var(--signal); }
+
+.waveform-svg { width: 100%; }
+
+/* ── Section base ── */
+section {
+  padding: 120px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 20px;
+}
+
+/* ── Problem ── */
+.problem {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.problem-text {}
+
+.problem-headline {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text-hi);
+  margin-bottom: 20px;
+}
+
+.problem-body {
+  font-size: 16px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+/* Existing tools comparison */
+.tool-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--base);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.tool-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: var(--elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tool-info {}
+
+.tool-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-hi);
+  margin-bottom: 2px;
+}
+
+.tool-desc {
+  font-size: 12px;
+  color: var(--text-lo);
+}
+
+.tool-verdict {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-lo);
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── How it works ── */
+.hiw-section {
+  text-align: center;
+  padding-top: 0;
+}
+
+.hiw-headline {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-hi);
+  margin-bottom: 16px;
+}
+
+.hiw-sub {
+  font-size: 17px;
+  color: var(--text-mid);
+  max-width: 50ch;
+  margin: 0 auto 72px;
+  line-height: 1.65;
+}
+
+.hiw-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.hiw-step {
+  background: var(--base);
+  padding: 40px 32px;
+  text-align: left;
+  position: relative;
+}
+
+.hiw-step:last-child {
+  background: color-mix(in srgb, var(--base) 92%, var(--signal) 8%);
+}
+
+.step-num {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-lo);
+  margin-bottom: 24px;
+}
+
+.step-moment {
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--text-hi);
+  margin-bottom: 16px;
+}
+
+.hiw-step:last-child .step-moment {
+  color: var(--signal);
+}
+
+.step-body {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.65;
+}
+
+/* Arrow connectors — purely decorative */
+.hiw-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -1px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  /* No arrow — border handles the visual separation cleanly */
+}
+
+/* ── Clarion vs others ── */
+.compare-section {
+  padding-top: 0;
+}
+
+.compare-headline {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-hi);
+  margin-bottom: 48px;
+  max-width: 22ch;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.compare-table thead th {
+  padding: 12px 20px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-table thead th.col-clarion {
+  color: var(--signal);
+  background: var(--signal-dim);
+  border-radius: 8px 8px 0 0;
+  border: 1px solid rgba(0,200,255,0.2);
+  border-bottom: none;
+}
+
+.compare-table tbody tr {
+  border-bottom: 1px solid var(--border);
+}
+
+.compare-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.compare-table tbody td {
+  padding: 16px 20px;
+  color: var(--text-mid);
+  vertical-align: middle;
+}
+
+.compare-table tbody td:first-child {
+  color: var(--text-hi);
+  font-weight: 500;
+}
+
+.col-clarion {
+  background: var(--signal-dim);
+  border-left: 1px solid rgba(0,200,255,0.15);
+  border-right: 1px solid rgba(0,200,255,0.15);
+}
+
+.compare-table tbody tr:last-child .col-clarion {
+  border-bottom: 1px solid rgba(0,200,255,0.2);
+  border-radius: 0 0 8px 8px;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--signal);
+}
+
+.cross {
+  color: var(--text-lo);
+}
+
+/* ── Vision ── */
+.vision-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 0;
+}
+
+.vision-headline {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--text-hi);
+  line-height: 1.1;
+  max-width: 18ch;
+  margin-bottom: 24px;
+}
+
+.vision-headline em {
+  font-style: normal;
+  color: var(--signal);
+}
+
+.vision-body {
+  font-size: 17px;
+  color: var(--text-mid);
+  max-width: 58ch;
+  line-height: 1.7;
+  margin-bottom: 56px;
+}
+
+.vision-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  text-align: left;
+}
+
+.vision-card {
+  background: var(--base);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px;
+  transition: border-color 0.2s;
+}
+
+.vision-card:hover {
+  border-color: var(--text-lo);
+}
+
+.vc-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  color: var(--signal);
+}
+
+.vc-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-hi);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.vc-body {
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+/* ── CTA ── */
+.cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 80px 24px 140px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-glow {
+  position: absolute;
+  bottom: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(ellipse at center top, rgba(0,200,255,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.cta-headline {
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--text-hi);
+  line-height: 1.05;
+  max-width: 16ch;
+  margin-bottom: 20px;
+}
+
+.cta-sub {
+  font-size: 17px;
+  color: var(--text-mid);
+  max-width: 48ch;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.cta-meta {
+  font-size: 12px;
+  color: var(--text-lo);
+  margin-top: 16px;
+}
+
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--signal);
+}
+
+.footer-brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-hi);
+  letter-spacing: -0.02em;
+}
+
+.footer-right {
+  font-size: 12px;
+  color: var(--text-lo);
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  section { padding: 80px 20px; }
+
+  .problem { grid-template-columns: 1fr; gap: 48px; }
+
+  .hiw-steps {
+    grid-template-columns: 1fr;
+    border-radius: 12px;
+  }
+
+  .vision-cards { grid-template-columns: 1fr; }
+
+  .compare-table thead th:nth-child(2),
+  .compare-table tbody td:nth-child(2) { display: none; }
+
+  footer { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+}
+
+@media (max-width: 480px) {
+  .hero-headline { font-size: 42px; }
+  .hiw-step { padding: 28px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-eyebrow-dot { animation: none; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── Nav ── -->
+<nav>
+  <div class="nav-brand">
+    <svg class="nav-logo" width="24" height="24" viewBox="0 0 36 36" fill="none">
+      <rect x="4" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/>
+      <rect x="10" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/>
+      <rect x="16" y="4" width="3" height="28" rx="1.5" fill="currentColor"/>
+      <rect x="22" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/>
+      <rect x="28" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/>
+    </svg>
+    <span class="nav-name">Clarion</span><span class="nav-tag">Voice</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#vision">Vision</a></li>
+    <li><a href="#cta" class="nav-cta">Try the demo</a></li>
+  </ul>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="hero-eyebrow">
+    <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+    Context-aware voice chat for gamers in crowded voice chats
+  </div>
+
+  <h1 class="hero-headline">
+    Hear what matters.<br/><em>Miss nothing.</em>
+  </h1>
+
+  <p class="hero-sub">
+    Clarion Voice listens for your name in a crowded room and turns up the person speaking to you - automatically, in real time, just for you.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#cta" class="btn-primary">
+      Try the demo
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="#how" class="btn-ghost">See how it works</a>
+  </div>
+
+  <!-- Signature element: the dual waveform -->
+  <div class="hero-waveform" aria-hidden="true">
+    <div class="waveform-label">
+      <span class="wl-noise">Existing tools - process audio equally</span>
+      <span class="wl-signal">Clarion - surface what's relevant to you</span>
+    </div>
+    <svg class="waveform-svg" viewBox="0 0 680 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Noise waveform (dim) — all voices equally loud -->
+      <polyline
+        points="0,48 12,28 20,62 28,36 36,54 44,22 52,68 60,42 68,30 76,58 84,44 92,20 100,66 108,38 116,52 124,26 132,64 140,40 148,48 156,30 164,56 172,34 180,60 188,44 196,22 204,68 212,36 220,54 228,28 236,62 244,42 252,50 260,30 268,58 276,36 284,64 292,24 300,68 308,42 316,54 324,28 332,60 340,40 348,48 356,26 364,56 372,34 380,62 388,44 396,22 404,68 412,38 420,52 428,26 436,64 444,40 452,48 460,30 468,58 476,36 484,62 492,24 500,68 508,44 516,50 524,28 532,62 540,40 548,54 556,30 564,60 572,38 580,52 588,26 596,64 604,42 612,50 620,30 632,58 644,44 656,62 668,40 680,48"
+        stroke="rgba(255,255,255,0.12)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+
+      <!-- Signal burst — the moment your name is mentioned -->
+      <!-- Quiet parts -->
+      <polyline
+        points="0,48 40,48 48,46 56,50 64,47 72,49"
+        stroke="rgba(0,200,255,0.25)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- The spike — name mentioned -->
+      <polyline
+        points="72,49 88,14 104,82 120,8 136,88 152,18 168,78 184,22 200,74 216,30 228,66 240,36 252,60 264,44 276,48"
+        stroke="#00C8FF"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Glow duplicate of the spike -->
+      <polyline
+        points="72,49 88,14 104,82 120,8 136,88 152,18 168,78 184,22 200,74 216,30 228,66 240,36 252,60 264,44 276,48"
+        stroke="rgba(0,200,255,0.2)"
+        stroke-width="8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+      <!-- Calm after -->
+      <polyline
+        points="276,48 300,47 320,49 340,48 360,47 380,49 420,48 460,47 500,48 540,49 580,48 620,47 660,48 680,48"
+        stroke="rgba(0,200,255,0.25)"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        fill="none"
+      />
+
+      <!-- Label: "your name" annotation -->
+      <line x1="180" y1="4" x2="180" y2="92" stroke="rgba(0,200,255,0.15)" stroke-width="1" stroke-dasharray="3 4"/>
+      <rect x="130" y="0" width="100" height="18" rx="4" fill="rgba(0,200,255,0.1)"/>
+      <text x="180" y="13" fill="#00C8FF" font-family="'Space Grotesk', sans-serif" font-size="10" font-weight="600" text-anchor="middle" letter-spacing="0.05em">YOUR NAME MENTIONED</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ── Problem ── -->
+<section id="problem" style="max-width:1100px; margin: 0 auto; padding: 120px 48px;">
+  <div class="problem reveal">
+    <div class="problem-text">
+      <div class="section-eyebrow">The problem</div>
+      <h2 class="problem-headline">Voice chat treats every sound equally. People don't.</h2>
+      <p class="problem-body">
+        In a team call, four people can be talking at once. Existing audio tools like AGC, noise suppression and manual volume sliders process every voice the same way. They amplify the room. They can't tell you that someone is talking <em>to you</em>.
+      </p>
+      <p class="problem-body" style="margin-bottom:0;">
+        Important callouts get lost. Coordination breaks down. You miss the moment your teammate said your name.
+      </p>
+    </div>
+    <div class="tool-list">
+      <div class="tool-item">
+        <div class="tool-icon">🎛️</div>
+        <div class="tool-info">
+          <div class="tool-name">Automatic Gain Control</div>
+          <div class="tool-desc">Normalises all input volumes uniformly</div>
+        </div>
+        <span class="tool-verdict">Equal treatment</span>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">🔇</div>
+        <div class="tool-info">
+          <div class="tool-name">Noise Suppression</div>
+          <div class="tool-desc">Filters background noise, not voice priority</div>
+        </div>
+        <span class="tool-verdict">Equal treatment</span>
+      </div>
+      <div class="tool-item">
+        <div class="tool-icon">🔊</div>
+        <div class="tool-info">
+          <div class="tool-name">Manual Volume Controls</div>
+          <div class="tool-desc">Requires you to adjust each person by hand</div>
+        </div>
+        <span class="tool-verdict">Manual only</span>
+      </div>
+      <div class="tool-item" style="border-color: rgba(0,200,255,0.3); background: color-mix(in srgb, var(--base) 94%, var(--signal) 6%);">
+        <div class="tool-icon" style="background: var(--signal-dim); border-color: rgba(0,200,255,0.25); color: var(--signal);">
+          <svg width="18" height="18" viewBox="0 0 36 36" fill="none"><rect x="4" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/><rect x="10" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/><rect x="16" y="4" width="3" height="28" rx="1.5" fill="currentColor"/><rect x="22" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/><rect x="28" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/></svg>
+        </div>
+        <div class="tool-info">
+          <div class="tool-name" style="color: var(--signal);">Clarion Voice</div>
+          <div class="tool-desc">Understands who is speaking to whom</div>
+        </div>
+        <span class="tool-verdict" style="color: var(--signal); border-color: rgba(0,200,255,0.3); background: var(--signal-dim);">Context-aware</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How it works ── -->
+<section id="how" style="max-width: 1100px; margin: 0 auto; padding: 0 48px 120px;">
+  <div class="hiw-section reveal">
+    <div class="section-eyebrow">How it works</div>
+    <h2 class="hiw-headline">Three moments. Invisible to you.</h2>
+    <p class="hiw-sub">
+      Clarion runs silently in the background. When it matters, it acts. You never touch a slider.
+    </p>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="step-num">01 - Transcribe</div>
+        <div class="step-moment">"Hey Alex, push mid-"</div>
+        <div class="step-body">Clarion streams live audio from every participant through Deepgram's speech recognition. Every word, in real time, with speaker attribution.</div>
+      </div>
+      <div class="hiw-step">
+        <div class="step-num">02 - Detect</div>
+        <div class="step-moment">Your name. Found.</div>
+        <div class="step-body">The transcript is scanned for your name on every new word. The detection is local to your client so no one else sees or hears anything change.</div>
+      </div>
+      <div class="hiw-step">
+        <div class="step-num">03 - Amplify</div>
+        <div class="step-moment" style="color: var(--signal);">Only for you.</div>
+        <div class="step-body">The room's volume is adjusted, just on your device, just for that moment. The rest of the room stays unchanged. You never miss the callout that mattered.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Comparison ── -->
+<section style="max-width: 1100px; margin: 0 auto; padding: 0 48px 120px;">
+  <div class="compare-section reveal">
+    <div class="section-eyebrow">Why Clarion</div>
+    <h2 class="compare-headline">Everything else processes sound. We understand conversation.</h2>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>Discord / TeamSpeak</th>
+          <th class="col-clarion">Clarion Voice</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Live transcription</td>
+          <td><span class="cross">—</span></td>
+          <td class="col-clarion"><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Speaker identification</td>
+          <td><span class="cross">—</span></td>
+          <td class="col-clarion"><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Name-mention detection</td>
+          <td><span class="cross">—</span></td>
+          <td class="col-clarion"><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Per-listener audio prioritisation</td>
+          <td><span class="cross">—</span></td>
+          <td class="col-clarion"><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Zero configuration required</td>
+          <td><span class="cross">Partial</span></td>
+          <td class="col-clarion"><span class="check">✓</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── Vision ── -->
+<section id="vision" style="max-width: 1100px; margin: 0 auto; padding: 0 48px 120px;">
+  <div class="vision-section reveal">
+    <div class="section-eyebrow">Long-term vision</div>
+    <h2 class="vision-headline">The MVP is just the beginning. The goal is <em>relevance</em>.</h2>
+    <p class="vision-body">
+      Name detection is the proof of concept. The long-term system understands which <em>conversations</em> matter to each user. Game state, role and context then surfaces what's relevant automatically.
+    </p>
+    <div class="vision-cards">
+      <div class="vision-card">
+        <div class="vc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="vc-title">Real-time name detection</div>
+        <div class="vc-body">MVP, live today. When someone says your name, their voice is temporarily amplified only for you.</div>
+      </div>
+      <div class="vision-card">
+        <div class="vc-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 10h14M10 3l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="vc-title">Role-aware prioritisation</div>
+        <div class="vc-body">Future: Clarion knows you're the team's support. Calls for healing or rotation route to you at higher prominence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section id="cta" style="max-width: 1100px; margin: 0 auto; padding: 0 48px;">
+  <div class="cta-section reveal">
+    <div class="cta-glow" aria-hidden="true"></div>
+    <div class="section-eyebrow">Get started</div>
+    <h2 class="cta-headline">Your name gets called. Make sure you hear it.</h2>
+    <p class="cta-sub">
+      Join a room, invite your team, and experience audio that actually understands who you are in the conversation.
+    </p>
+    <a href="#" class="btn-primary" style="font-size: 16px; padding: 16px 36px;">
+      Open Clarion Voice
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p class="cta-meta">College project · Built with LiveKit & Deepgram</p>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="footer-brand">
+    <svg width="20" height="20" viewBox="0 0 36 36" fill="none">
+      <rect x="4" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/>
+      <rect x="10" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/>
+      <rect x="16" y="4" width="3" height="28" rx="1.5" fill="currentColor"/>
+      <rect x="22" y="9" width="3" height="18" rx="1.5" fill="currentColor" opacity="0.6"/>
+      <rect x="28" y="14" width="3" height="8" rx="1.5" fill="currentColor" opacity="0.4"/>
+    </svg>
+    <span class="footer-brand-name">Clarion Voice</span>
+  </div>
+  <span class="footer-right">A college project in context-aware communication</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
